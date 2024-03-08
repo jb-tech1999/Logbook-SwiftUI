@@ -204,13 +204,24 @@ class Webservice {
                 completion(.failure(.custom(errorMessage: "No Data")))
                 return
             }
-            guard let logs = try? JSONDecoder().decode([LogResponse].self, from: data) else {
-                completion(.failure(.decodingError))
-                print("Decoding Error")
-                print(data)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                // Handle cases where the response is not an HTTP response
+                completion(.failure(.custom(errorMessage: "Invalid response")))
                 return
             }
-            completion(.success("OK"))
+            
+            if 200..<300 ~= httpResponse.statusCode {
+                // Successful status code (e.g., 200 OK)
+                completion(.success("OK"))
+            }
+//            guard let logs = try? JSONDecoder().decode([LogResponse].self, from: data) else {
+//                completion(.failure(.decodingError))
+//                print("Decoding Error")
+//                print(data)
+//                return
+//            }
+//            completion(.success("OK"))
             
             
         }.resume()

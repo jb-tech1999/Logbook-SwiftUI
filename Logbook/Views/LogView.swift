@@ -11,6 +11,8 @@ struct LogView: View {
     
     @ObservedObject private var  viewModel: AuthViewModel = AuthViewModel()
     @ObservedObject var  logListVM = LogListViewModel()
+    @ObservedObject var  carListVM = CarListViewModel()
+    @State var carRegistration: String?
     
     var sortedLogs: [LogViewModel] {
         return logListVM.logs.sorted { log1, log2 in
@@ -30,6 +32,20 @@ struct LogView: View {
         NavigationView {
             VStack {
                 
+                Picker("Select Registration", selection: $carRegistration){
+                    ForEach(carListVM.cars, id: \.self) { car in
+                        Text(car.registration).tag(car.registration as String?)
+                    }
+                }
+                
+                //.onChange(of: carRegistration, action: (logListVM.GetLogs(registration:  carRegistration ?? ""))
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+                .onChange(of: carRegistration) {
+                    logListVM.GetLogs(registration: carRegistration ?? "")
+                }
+                
+                
                 if sortedLogs.count > 0 {
                     List {
                         ForEach(sortedLogs, id: \.log.logid) { logViewModel in
@@ -37,7 +53,7 @@ struct LogView: View {
                                 HStack {
                                     Text("\(logViewModel.formattedDate)")
                                     Spacer()
-                                    Text("TotalCost: \(logViewModel.formattedTotalCost)")
+                                    Text("Cost: \(logViewModel.formattedTotalCost)")
                                 }
                             }
                         }
@@ -45,7 +61,8 @@ struct LogView: View {
                 }
             }
             .onAppear {
-                logListVM.GetLogs(registration: "FV58BTGP")
+                carListVM.getAllCars()
+                
             }
             .navigationTitle("Logs")
             .toolbar(content : {
@@ -69,10 +86,27 @@ struct LogDetailView: View {
 
     var body: some View {
         VStack {
-            Text("Date: \(logViewModel.formattedDate)")
-            Text("Distance: \(logViewModel.formattedDistance)")
-            Text("Liters Purchased: \(logViewModel.formattedLitersPurchase)")
-            Text("Total Cost: \(logViewModel.formattedTotalCost)")
+            List {
+                Section(header: Text("Date:")) {
+                    Text("\(logViewModel.formattedDate)")
+                }
+                Section(header: Text("FuelEconomy  :")) {
+                    Text("\(logViewModel.fueleconomy)")
+                }
+                Section(header: Text("Distance:")) {
+                    Text("\(logViewModel.formattedDistance)")
+                }
+                Section(header: Text("Liters Purchased:")) {
+                    Text("\(logViewModel.formattedLitersPurchase)")
+                }
+                Section(header: Text("Total Cost:")) {
+                    Text("\(logViewModel.formattedTotalCost)")
+                }
+                Section(header: Text("Garage:")) {
+                    Text("\(logViewModel.garage)")
+                }
+                
+            }.listSectionSpacing(0)
             // Add more details as needed
         }
         .navigationTitle("Log Details")

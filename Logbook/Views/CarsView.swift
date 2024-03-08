@@ -50,9 +50,11 @@ struct CarsView: View {
                }
            }
        })
-       .sheet(isPresented: $carListVM.isShowingAddCarView) {
+       .sheet(isPresented: $carListVM.isShowingAddCarView, onDismiss: carListVM.getAllCars, content: {
            AddCarView()
-       }
+       })
+            
+
                 
             }
             
@@ -70,9 +72,18 @@ struct CarDetailView: View {
 
     var body: some View {
         VStack {
-            Text("Make: \(carViewModel.make)")
-            Text("Model: \(carViewModel.model)")
-            Text("Registration: \(carViewModel.registration)")
+            List {
+                Section(header: Text("Make:")){
+                    Text("\(carViewModel.make)")
+                }
+                Section(header: Text("Model:")){
+                    Text("\(carViewModel.model)")
+                }
+                Section(header: Text("Registration:")){
+                    Text("\(carViewModel.registration)")
+                }
+            }.listSectionSpacing(0)
+
             // Add more details as needed
         }
         .navigationTitle("Car Details")

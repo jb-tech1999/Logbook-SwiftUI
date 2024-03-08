@@ -12,7 +12,7 @@ class addLogViewModel: ObservableObject {
     
     
     @Published var isAdded = false
-    var carRegistration: String = "FV58BTGP"
+    @Published var carRegistration: String?
     var date: Date = .now
     var odometer: Int?
     var distance: Double?
@@ -40,7 +40,7 @@ class addLogViewModel: ObservableObject {
                 return
             }
             
-            Webservice().addLog(token: token, carRegistration: carRegistration, date: formattedDate(date), odometer: odometer ?? 0, distance: distance ?? 0, totalcost: totalcost ?? 0, garage: garage, litersPurchase: litersPurchase ?? 0) {result in
+            Webservice().addLog(token: token, carRegistration: carRegistration ?? "", date: formattedDate(date), odometer: odometer ?? 0, distance: distance ?? 0, totalcost: totalcost ?? 0, garage: garage, litersPurchase: litersPurchase ?? 0) {result in
                 switch result {
                 case .success(let message):
                     print(message)

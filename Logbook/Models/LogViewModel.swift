@@ -66,4 +66,10 @@ struct LogViewModel {
     var formattedTotalCost: String {
         return String(format: "R%.2f", log.totalcost)
     }
+    var garage: String {
+        return String(log.garage)
+    }
+    var fueleconomy: String {
+        return String(format: "%.2f km/L", log.distance / log.litersPurchase)
+    }
 }

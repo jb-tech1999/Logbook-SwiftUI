@@ -11,6 +11,7 @@ struct AddCarView: View {
     
     @ObservedObject var addCarVM = AddCarViewModel()
     @ObservedObject var  carListVM = CarListViewModel()
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
         VStack {
             List {
@@ -24,6 +25,8 @@ struct AddCarView: View {
             }
             Button {
                 addCarVM.saveCar()
+                carListVM.getAllCars()
+                presentationMode.wrappedValue.dismiss()
             }label: {
                 Text("Add car")
             }.padding()

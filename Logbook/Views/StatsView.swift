@@ -6,17 +6,24 @@
 //
 
 import SwiftUI
+import Charts
 
 struct StatsView: View {
+    @ObservedObject var  logListVM = LogListViewModel()
+
     var body: some View {
         NavigationView {
+ 
+        
             Text("PlaceHolder")
                 .navigationTitle("Stats")
+            
         }
-        
-        
     }
 }
+        
+        
+
 
 #Preview {
     StatsView()
