@@ -7,22 +7,38 @@
 
 import Foundation
 
+// MARK: - Error Types
+
+/// Errors that can occur during authentication
 enum AuthenticationError: Error {
     case invalidCredentials
     case custom(errorMessage: String)
 }
 
+/// Errors that can occur when adding logs or cars
+enum AddLogError: Error {
+    case encodeError
+    case invalidURL
+    case custom(errorMessage: String)
+    case decodingError
+}
+
+/// General network communication errors
+enum NetworkError: Error {
+    case invalidURL
+    case noData
+    case decodingError
+}
+
+// MARK: - Request Models
+
+/// User credentials for authentication
 struct User: Codable {
     let username: String
     let password: String
 }
 
-struct LoginReponse: Codable {
-    let token : String?
-    let detail: String?
-    
-}
-
+/// Request model for creating a new car
 struct newCar: Codable {
     let registration: String
     let make: String
@@ -30,7 +46,7 @@ struct newCar: Codable {
     let year : Int
 }
 
-
+/// Request model for creating a new fuel log entry
 struct newLog: Codable {
     let carRegistration: String?
     let date: String?
@@ -41,19 +57,15 @@ struct newLog: Codable {
     let litersPurchase: Double?
 }
 
-enum AddLogError: Error {
-    case encodeError
-    case invalidURL
-    case custom(errorMessage: String)
-    case decodingError
+// MARK: - Response Models
+
+/// Response from login endpoint containing JWT token
+struct LoginReponse: Codable {
+    let token : String?
+    let detail: String?
 }
 
-enum NetworkError: Error {
-    case invalidURL
-    case noData
-    case decodingError
-}
-
+/// Vehicle information returned from API
 struct Car: Decodable {
     let model: String
     let year: Int
@@ -62,6 +74,7 @@ struct Car: Decodable {
     let user_id: Int
 }
 
+/// Fuel log entry returned from API
 struct LogResponse: Decodable {
     let logid: Int?
     let user_id: Int
@@ -74,15 +87,24 @@ struct LogResponse: Decodable {
     let totalcost: Double
 }
 
+/// Generic delete operation response
 struct DeleteMessage: Decodable {
     let message: String
 }
 
+// MARK: - Webservice
 
+/// Service class for all API communication with the backend
+/// Handles authentication, vehicle management, and fuel log operations
 class Webservice {
     
+    // MARK: - Fuel Log Management
     
-    
+    /// Retrieves all fuel logs for a specific vehicle
+    /// - Parameters:
+    ///   - token: JWT authentication token
+    ///   - registration: Vehicle registration/license plate number
+    ///   - completion: Completion handler with Result containing array of LogResponse objects or NetworkError
     func getLogs(token: String, registration: String, completion: @escaping (Result<[LogResponse], NetworkError>) -> Void) {
         guard let url = URL(string: "https://bellispc.ddns.net/api/logs/\(registration)") else {
             completion(.failure(.invalidURL))
@@ -112,7 +134,12 @@ class Webservice {
         
     }
     
+    // MARK: - Vehicle Management
     
+    /// Retrieves all vehicles for the authenticated user
+    /// - Parameters:
+    ///   - token: JWT authentication token
+    ///   - completion: Completion handler with Result containing array of Car objects or NetworkError
     func getCars(token: String, completion: @escaping (Result<[Car], NetworkError>) -> Void) {
         guard let url = URL(string: "https://bellispc.ddns.net/api/cars") else {
             completion(.failure(.invalidURL))
@@ -138,7 +165,13 @@ class Webservice {
         
     }
     
+    // MARK: - Authentication
     
+    /// Authenticates a user with username and password
+    /// - Parameters:
+    ///   - username: User's username
+    ///   - password: User's password
+    ///   - completion: Completion handler with Result containing JWT token or AuthenticationError
     func login (username: String, password: String, completion: @escaping(Result<String, AuthenticationError>) -> Void)  {
         
         guard let url = URL(string : "https://bellispc.ddns.net/api/login") else {
@@ -174,16 +207,17 @@ class Webservice {
         
     }
     
-    //    struct newLog: Codable {
-    //        let carRegistration: String
-    //        let date: String
-    //        let odometer: Int
-    //        let distance: Double
-    //        let totalcost: Double
-    //        let garage: String
-    //        let litersPurchase: Double
-    //    }
-    
+    /// Adds a new fuel log entry for a vehicle
+    /// - Parameters:
+    ///   - token: JWT authentication token
+    ///   - carRegistration: Vehicle registration/license plate number
+    ///   - date: Date of fuel purchase in yyyy-MM-dd format
+    ///   - odometer: Odometer/speedometer reading at time of purchase
+    ///   - distance: Distance traveled since last fill-up in kilometers
+    ///   - totalcost: Total cost of fuel purchase
+    ///   - garage: Name of gas station/garage
+    ///   - litersPurchase: Amount of fuel purchased in liters
+    ///   - completion: Completion handler with Result containing success message or AddLogError
     func addLog(token: String, carRegistration: String, date: String, odometer: Int, distance: Double, totalcost: Double, garage: String, litersPurchase: Double, completion: @escaping(Result<String, AddLogError>) -> Void) {
         guard let url = URL(string : "https://bellispc.ddns.net/api/addlog") else {
             completion(.failure(.invalidURL))
@@ -228,6 +262,14 @@ class Webservice {
         
     }
     
+    /// Adds a new vehicle for the authenticated user
+    /// - Parameters:
+    ///   - token: JWT authentication token
+    ///   - registration: Vehicle registration/license plate number
+    ///   - make: Vehicle manufacturer (e.g., Toyota, Ford)
+    ///   - model: Vehicle model (e.g., Corolla, F-150)
+    ///   - year: Year of manufacture
+    ///   - completion: Completion handler with Result containing success message or AddLogError
     func addCar(token: String, registration: String, make: String, model: String, year: Int , completion: @escaping(Result<String, AddLogError>) -> Void) {
         guard let url = URL(string : "https://bellispc.ddns.net/api/addcar") else {
             completion(.failure(.invalidURL))
@@ -272,6 +314,11 @@ class Webservice {
         
     }
     
+    /// Deletes a vehicle by registration number
+    /// - Parameters:
+    ///   - token: JWT authentication token
+    ///   - registration: Vehicle registration/license plate number to delete
+    ///   - completion: Completion handler with Result containing success message or AddLogError
     func deleteCar(token: String, registration: String, completion: @escaping(Result<String, AddLogError>) -> Void) {
         guard let url = URL(string : "https://bellispc.ddns.net/api/deletecar/\(registration)") else {
             completion(.failure(.invalidURL))
