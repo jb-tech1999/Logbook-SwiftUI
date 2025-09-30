@@ -226,12 +226,15 @@ Logbook-SwiftUI/
 
 This project includes comprehensive documentation to help you understand and contribute to the codebase:
 
+- **[DOCS_INDEX.md](DOCS_INDEX.md)** - Complete documentation index and navigation guide
 - **[README.md](README.md)** (this file) - Project overview and quick start guide
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - Detailed architecture and design patterns documentation
 - **[API.md](API.md)** - Complete API endpoint documentation with examples
 - **[SETUP.md](SETUP.md)** - Step-by-step development environment setup guide
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing to the project
 - **[CHANGELOG.md](CHANGELOG.md)** - Version history and release notes
+
+> 📚 **New to the project?** Start with [DOCS_INDEX.md](DOCS_INDEX.md) for a guided tour of all documentation.
 
 ## Contributing
 
