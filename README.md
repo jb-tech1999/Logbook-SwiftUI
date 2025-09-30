@@ -11,6 +11,7 @@ A modern iOS application for tracking vehicle fuel consumption, maintenance logs
 - [Usage](#usage)
 - [API Integration](#api-integration)
 - [Project Structure](#project-structure)
+- [Documentation](#documentation)
 - [Contributing](#contributing)
 - [Known Issues](#known-issues)
 - [Future Enhancements](#future-enhancements)
@@ -221,9 +222,29 @@ Logbook-SwiftUI/
 └── README.md                     # This file
 ```
 
+## Documentation
+
+This project includes comprehensive documentation to help you understand and contribute to the codebase:
+
+- **[README.md](README.md)** (this file) - Project overview and quick start guide
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Detailed architecture and design patterns documentation
+- **[API.md](API.md)** - Complete API endpoint documentation with examples
+- **[SETUP.md](SETUP.md)** - Step-by-step development environment setup guide
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing to the project
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history and release notes
+
 ## Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions are welcome! Please follow these steps:
+
+1. Read the [Contributing Guidelines](CONTRIBUTING.md)
+2. Review the [Architecture Documentation](ARCHITECTURE.md)
+3. Follow the [Setup Guide](SETUP.md) to get started
+4. Create a feature branch
+5. Make your changes
+6. Submit a pull request
+
+For more details, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Known Issues
 
